@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>BENGALURU: CITY OF DREAMS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,900;1,700&family=Rajdhani:wght@500;600;700&family=Teko:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+  <div id="game-container">
+    <!-- WebGL Canvas Layer -->
+    <canvas id="webgl-canvas"></canvas>
+
+    <!-- Crosshair / Reticle for First Person -->
+    <div id="crosshair" class="hidden"></div>
+
+    <!-- UI Overlay Layer -->
+    <div id="ui-layer">
+      <!-- In-Game HUD -->
+      <div id="hud" class="hud-screen hidden">
+        <!-- Top Left: District & Street Location -->
+        <div class="hud-location">
+          <div class="hud-road-name" id="hud-road">Dr B R Ambedkar Road</div>
+          <div class="hud-district-name" id="hud-district">Sampangi Rama Nagara, Bengaluru</div>
+        </div>
+
+        <!-- Top Right: Time, Wanted, Money, Health -->
+        <div class="hud-top-right">
+          <div class="hud-stat-badge">
+            <span class="hud-stat-icon">₹</span>
+            <span id="hud-money">12,500</span>
+          </div>
+          <div class="hud-stat-badge">
+            <span class="hud-stat-icon">🕒</span>
+            <span id="hud-time">17:45</span>
+          </div>
+          <div class="hud-wanted-stars" id="hud-wanted">
+            <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+          </div>
+        </div>
+
+        <!-- Center Subtitle / Mission Banner -->
+        <div class="hud-subtitle-container" id="hud-subtitle-box">
+          <p id="hud-subtitle">Conquer the streets. And make Bangalore yours.</p>
+        </div>
+
+        <!-- Vehicle Boarding Proximity Prompt -->
+        <div id="vehicle-prompt" class="vehicle-prompt hidden">[E] DRIVE VEHICLE</div>
+
+        <!-- Bottom Left: Minimap & Compass (Click to Enlarge) -->
+        <div class="hud-minimap-container">
+          <div class="minimap-frame" title="Click to enlarge city map (or press M)">
+            <canvas id="minimap-canvas" width="200" height="200"></canvas>
+            <div class="minimap-player-marker" id="minimap-marker"></div>
+            <div class="minimap-north-indicator" id="minimap-north">N</div>
+            <div class="minimap-click-hint">MAP [M]</div>
+          </div>
+          <div class="minimap-coords" id="minimap-coords">LAT: 12.9716° N | LON: 77.5946° E</div>
+        </div>
+
+        <!-- Bottom Right: Speedometer, Gear, Stamina -->
+        <div class="hud-vitals-container">
+          <div class="vital-bars">
+            <div class="vital-row">
+              <span class="vital-label">HP</span>
+              <div class="vital-track"><div class="vital-fill hp-fill" id="hp-bar" style="width: 100%;"></div></div>
+            </div>
+            <div class="vital-row">
+              <span class="vital-label">STA</span>
+              <div class="vital-track"><div class="vital-fill stamina-fill" id="stamina-bar" style="width: 100%;"></div></div>
+            </div>
+          </div>
+
+          <!-- Speedometer Dial -->
+          <div class="speedometer-gauge">
+            <div class="speed-dial-ring">
+              <svg viewBox="0 0 120 120" class="speed-svg">
+                <circle cx="60" cy="60" r="50" class="speed-bg-track" />
+                <circle cx="60" cy="60" r="50" class="speed-fill-track" id="speed-circle" />
+              </svg>
+              <div class="speed-readout">
+                <span class="speed-value" id="hud-speed">0</span>
+                <span class="speed-unit">KM/H</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controls Guide -->
+        <div class="hud-controls-helper" id="hud-controls">
+          <div class="control-key"><span>W A S D</span> Move / Drive</div>
+          <div class="control-key"><span>SHIFT</span> Sprint</div>
+          <div class="control-key"><span>SPACE</span> Jump / Handbrake</div>
+          <div class="control-key"><span>E</span> Enter/Exit Vehicle</div>
+          <div class="control-key"><span>M</span> Enlarge Map</div>
+          <div class="control-key"><span>H</span> Horn</div>
+          <div class="control-key"><span>C</span> View Mode</div>
+          <div class="control-key"><span>ESC</span> Menu</div>
+        </div>
+      </div>
+
+      <!-- On-Screen Vehicle Driving Pedals / Touch / Click Controls -->
+      <div id="driving-controls-overlay" class="driving-overlay hidden">
+        <!-- Steering (Left Side) -->
+        <div class="driving-steering-group">
+          <button class="driving-btn steer-btn" id="ctrl-left" title="Steer Left (A / Left Arrow)">◀ STEER</button>
+          <button class="driving-btn steer-btn" id="ctrl-right" title="Steer Right (D / Right Arrow)">STEER ▶</button>
+        </div>
+
+        <!-- Center Actions -->
+        <div class="driving-center-group">
+          <button class="driving-btn action-btn horn-btn" id="ctrl-horn" title="Honk Horn (H)">📢 HORN</button>
+          <button class="driving-btn action-btn exit-btn" id="ctrl-exit" title="Exit Vehicle (E)">🚪 EXIT [E]</button>
+        </div>
+
+        <!-- Pedals: Speed / Accel & Brake / Reverse (Right Side) -->
+        <div class="driving-pedals-group">
+          <button class="driving-btn pedal-btn accel-btn" id="ctrl-accel" title="Accelerate (W / Up Arrow)">
+            <span class="pedal-icon">▲</span>
+            <span class="pedal-label">SPEED</span>
+          </button>
+          <button class="driving-btn pedal-btn brake-btn" id="ctrl-brake" title="Brake / Reverse (S / Down Arrow)">
+            <span class="pedal-icon">▼</span>
+            <span class="pedal-label">BRAKE</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Fullscreen Enlarged Bengaluru City Map Modal -->
+      <div id="map-modal" class="map-modal-screen hidden">
+        <div class="map-modal-backdrop"></div>
+        <div class="map-modal-box">
+          <div class="map-modal-header">
+            <div class="map-header-title">
+              <h2>BENGALURU CITY MAP • ಇಂಟರಾಕ್ಟಿವ್ ನಕ್ಷೆ</h2>
+              <span class="map-header-sub">DR B R AMBEDKAR RD • MARGOSA RD • SILK BOARD CORRIDOR</span>
+            </div>
+            <div class="map-header-controls">
+              <button class="map-ctrl-btn" id="btn-map-recenter" title="Center on player">⌖ RECENTER</button>
+              <button class="map-ctrl-btn" id="btn-map-zoomin" title="Zoom in">+</button>
+              <button class="map-ctrl-btn" id="btn-map-zoomout" title="Zoom out">-</button>
+              <button class="map-ctrl-btn close-btn" id="btn-close-map" title="Close map">✕ CLOSE [M]</button>
+            </div>
+          </div>
+          <div class="map-canvas-container">
+            <canvas id="enlarged-map-canvas"></canvas>
+          </div>
+          <div class="map-modal-footer">
+            <span>💡 Click and drag to pan map. Scroll mouse wheel to zoom in/out. Moving BMTC buses (Blue), Cars (Red), Autos (Yellow).</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- GTA-Style WASTED Death Screen -->
+      <div id="wasted-screen" class="wasted-overlay hidden">
+        <div class="wasted-vignette"></div>
+        <div class="wasted-content">
+          <h1 class="wasted-title">WASTED</h1>
+          <p class="wasted-subtitle" id="wasted-reason">Hit by oncoming traffic on Dr B R Ambedkar Road</p>
+          <div class="wasted-respawn-bar"><div class="wasted-respawn-fill"></div></div>
+        </div>
+      </div>
+
+      <!-- Main Menu Screen -->
+      <div id="main-menu" class="menu-screen">
+        <div class="menu-overlay"></div>
+        <div class="menu-content">
+          <div class="menu-header">
+            <div class="bengaluru-kannada">ಬೆಂಗಳೂರು: ಕನಸುಗಳ ನಗರಿ</div>
+            <h1 class="game-title">BENGALURU</h1>
+            <h2 class="game-subtitle">CITY OF DREAMS</h2>
+            <div class="game-tagline">AAA OPEN-WORLD ACTION ADVENTURE</div>
+          </div>
+
+          <div class="menu-body">
+            <!-- Left Side: Main Navigation Options -->
+            <div class="menu-options-panel">
+              <button class="menu-btn primary-btn" id="btn-start-game">
+                <span class="btn-icon">▶</span>
+                <span class="btn-text">ENTER BENGALURU</span>
+              </button>
+              <button class="menu-btn" id="btn-customization">
+                <span class="btn-icon">👤</span>
+                <span class="btn-text">CHARACTER PROFILE</span>
+              </button>
+              <button class="menu-btn" id="btn-district-select">
+                <span class="btn-icon">📍</span>
+                <span class="btn-text">SELECT DISTRICT</span>
+              </button>
+              <button class="menu-btn" id="btn-time-select">
+                <span class="btn-icon">☀️</span>
+                <span class="btn-text">TIME & WEATHER</span>
+              </button>
+              <button class="menu-btn" id="btn-settings">
+                <span class="btn-icon">⚙️</span>
+                <span class="btn-text">GRAPHICS & CONTROLS</span>
+              </button>
+            </div>
+
+            <!-- Right Side: Dynamic Context Panels -->
+            <div class="menu-detail-panel">
+              <!-- District Selector Subpanel -->
+              <div id="panel-district" class="subpanel">
+                <h3 class="panel-title">SELECT STARTING DISTRICT</h3>
+                <div class="district-grid" id="district-cards"></div>
+              </div>
+
+              <!-- Character Customizer Subpanel -->
+              <div id="panel-customization" class="subpanel hidden">
+                <h3 class="panel-title">CHARACTER CUSTOMIZATION</h3>
+                <div class="customizer-controls">
+                  <div class="custom-field">
+                    <label>Identity Name</label>
+                    <input type="text" id="cust-name" value="Naveen" maxlength="16" class="custom-input">
+                  </div>
+                  <div class="custom-field">
+                    <label>Skin Tone</label>
+                    <div class="palette-options" id="cust-skin-palette"></div>
+                  </div>
+                  <div class="custom-field">
+                    <label>Polo / Shirt Color</label>
+                    <div class="palette-options" id="cust-shirt-palette"></div>
+                  </div>
+                  <div class="custom-field">
+                    <label>Jeans / Trousers</label>
+                    <div class="palette-options" id="cust-jeans-palette"></div>
+                  </div>
+                  <div class="custom-field">
+                    <label>Sneakers Color</label>
+                    <div class="palette-options" id="cust-shoes-palette"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Time Subpanel -->
+              <div id="panel-time" class="subpanel hidden">
+                <h3 class="panel-title">TIME OF DAY</h3>
+                <div class="time-options-grid">
+                  <button class="time-card" data-time="morning">
+                    <span class="time-emoji">🌅</span>
+                    <span class="time-label">Morning</span>
+                    <span class="time-sub">Crisp Bengaluru dawn</span>
+                  </button>
+                  <button class="time-card" data-time="afternoon">
+                    <span class="time-emoji">☀️</span>
+                    <span class="time-label">Afternoon</span>
+                    <span class="time-sub">Vibrant daylight</span>
+                  </button>
+                  <button class="time-card active" data-time="sunset">
+                    <span class="time-emoji">🌇</span>
+                    <span class="time-label">Golden Hour</span>
+                    <span class="time-sub">Warm amber sunset</span>
+                  </button>
+                  <button class="time-card" data-time="night">
+                    <span class="time-emoji">🌃</span>
+                    <span class="time-label">Night</span>
+                    <span class="time-sub">Neon & streetlights</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Settings Subpanel -->
+              <div id="panel-settings" class="subpanel hidden">
+                <h3 class="panel-title">GRAPHICS & AUDIO SETTINGS</h3>
+                <div class="settings-rows">
+                  <div class="setting-item">
+                    <label>Graphics Preset</label>
+                    <select id="setting-graphics" class="custom-select">
+                      <option value="low">Low (Performance)</option>
+                      <option value="medium">Medium (Balanced)</option>
+                      <option value="high" selected>High (PBR & Soft Shadows)</option>
+                      <option value="ultra">Ultra (Max Quality)</option>
+                    </select>
+                  </div>
+                  <div class="setting-item">
+                    <label>Mouse Sensitivity</label>
+                    <input type="range" id="setting-sensitivity" min="0.5" max="3.0" step="0.1" value="1.2" class="custom-slider">
+                  </div>
+                  <div class="setting-item">
+                    <label>Master Audio Volume</label>
+                    <input type="range" id="setting-volume" min="0" max="1" step="0.05" value="0.8" class="custom-slider">
+                  </div>
+                  <div class="setting-item">
+                    <label>Traffic Ambience</label>
+                    <input type="checkbox" id="setting-ambience" checked class="custom-checkbox">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="menu-footer">
+            <span class="footer-credit">BENGALURU: CITY OF DREAMS • STAGE 1 & 2 FOUNDATION</span>
+            <span class="footer-tip">💡 TIP: Press E to enter and drive any car or BMTC bus. Press M to enlarge map.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pause Menu Screen -->
+      <div id="pause-menu" class="menu-screen pause-screen hidden">
+        <div class="menu-overlay"></div>
+        <div class="pause-content">
+          <h2 class="pause-title">GAME PAUSED</h2>
+          <div class="pause-buttons">
+            <button class="menu-btn primary-btn" id="btn-pause-resume">RESUME PLAY</button>
+            <button class="menu-btn" id="btn-pause-respawn">RESPAWN AT DISTRICT</button>
+            <button class="menu-btn" id="btn-pause-time">CHANGE TIME OF DAY</button>
+            <button class="menu-btn" id="btn-pause-main-menu">RETURN TO MAIN MENU</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notification Toast -->
+      <div id="toast" class="toast-message hidden"></div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
