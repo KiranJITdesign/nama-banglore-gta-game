@@ -160,6 +160,53 @@ export class AudioManager {
   }
 
   /**
+   * AUTHENTIC KARNATAKA POLICE WHISTLE (Double Shrill Blast)
+   */
+  playPoliceWhistle() {
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+
+    const playTrill = (startTime, dur) => {
+      const osc1 = this.ctx.createOscillator();
+      const osc2 = this.ctx.createOscillator();
+      const lfo = this.ctx.createOscillator();
+      const lfoGain = this.ctx.createGain();
+      const gain = this.ctx.createGain();
+
+      osc1.type = 'sine';
+      osc2.type = 'triangle';
+      osc1.frequency.setValueAtTime(2450, startTime);
+      osc2.frequency.setValueAtTime(2780, startTime);
+
+      // Rapid trill flutter
+      lfo.frequency.setValueAtTime(18, startTime);
+      lfoGain.gain.setValueAtTime(80, startTime);
+      lfo.connect(lfoGain);
+      lfoGain.connect(osc1.frequency);
+      lfoGain.connect(osc2.frequency);
+
+      gain.gain.setValueAtTime(0.001, startTime);
+      gain.gain.linearRampToValueAtTime(0.24, startTime + 0.03);
+      gain.gain.setValueAtTime(0.24, startTime + dur - 0.04);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + dur);
+
+      osc1.connect(gain);
+      osc2.connect(gain);
+      gain.connect(this.masterGain);
+
+      osc1.start(startTime);
+      osc2.start(startTime);
+      lfo.start(startTime);
+      osc1.stop(startTime + dur);
+      osc2.stop(startTime + dur);
+      lfo.stop(startTime + dur);
+    };
+
+    playTrill(t, 0.2);
+    playTrill(t + 0.25, 0.3);
+  }
+
+  /**
    * AUTHENTIC BMTC BUS PNEUMATIC AIR HORN
    */
   playBusHorn(distance = 0) {
