@@ -58,31 +58,35 @@ The game pipeline integrates five core systems:
 | **Pause Game** | `Esc` | — |
 
 ---
-
 ## 🧱 How It Works
 
-## 🧱 How It Works
+```mermaid
+graph TD
+    subgraph Client ["Client Browser (index.html & HUD)"]
+        UI["Glassmorphism HUD, Minimap & Speedometer"]
+        Input["W A S D, Touch pedals, E, H, Space, M"]
+        Audio["Procedural Web Audio (BMTC horns, RPM, sirens)"]
+        Renderer["Three.js 3D WebGL Viewport"]
+    end
 
-```text
-[ Keyboard / Touch Controls ]
-              │
-              ▼
-    [ Game Loop / Core Engine ]
-         │               │
-         ▼               ▼
-[ Physics (Cannon-es) ]   [ Autonomous AI ]
-         │                       │
-         ├───────────────────────┤
-         ▼                       ▼
-[ Dynamic Vehicle & Debris ]   [ Traffic, Pedestrians & Police ]
-         │                       │
-         ├───────────────────────┘
-         │
-         ├───► [ 3D PBR Renderer (Three.js) ] ───► [ Viewport & HUD ]
-         │
-         └───► [ Procedural Web Audio API ]   ───► [ Speakers / Output ]
-```
+    subgraph Engine ["Game Engine (Vite Bundler)"]
+        Physics["Cannon-es Physics World (Suspension & Collisions)"]
+        City["Bengaluru Map (Roads, Flyovers, Buildings)"]
+        TrafficAI["Vehicle AI (BMTC buses, autos, cars)"]
+        PedAI["Pedestrian AI (Sidewalk walk, melee retaliation)"]
+        Police["Wanted System (1-5 Stars, Karnataka Police chase)"]
+    end
 
+    Input -->|"Drive, sprint, horn, interact"| Physics
+    Input -->|"Toggle map, horn sound"| UI
+    Physics -->|"Body transforms & velocity"| Renderer
+    City -->|"Mesh geometry & PBR textures"| Renderer
+    TrafficAI -->|"Pathfinding & raycast avoidance"| Physics
+    PedAI -->|"Aggro & damage detection"| Physics
+    Police -->|"Pursuit & interceptor sirens"| Physics
+    Physics -->|"Speed RPM, impacts, sirens"| Audio
+    Physics -->|"Live coordinates & speed"| UI
+'''
 📂 Repository Structure
 nama-banglore-gta-game/
 ├── public/              # Static assets, textures, and UI icons
