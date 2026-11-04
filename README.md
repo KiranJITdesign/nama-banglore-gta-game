@@ -86,7 +86,12 @@ graph TD
     Police -->|"Pursuit & interceptor sirens"| Physics
     Physics -->|"Speed RPM, impacts, sirens"| Audio
     Physics -->|"Live coordinates & speed"| UI
-'''
+```
+
+---
+
+## 📂 Repository Structure
+
 📂 Repository Structure
 nama-banglore-gta-game/
 ├── public/              # Static assets, textures, and UI icons
