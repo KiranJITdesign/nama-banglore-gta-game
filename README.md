@@ -61,23 +61,27 @@ The game pipeline integrates five core systems:
 
 ## 🧱 How It Works
 
-```mermaid
-graph TD
-    Input[Keyboard / Touch Input] --> Engine["Core Game Loop (Vite / JS)"]
-    Engine --> Phys["Physics World (Cannon-es)"]
-    Engine --> AI["Traffic & Pedestrian AI"]
-    
-    Phys -->|"Collision & Forces"| Veh["Vehicle Dynamics & Debris"]
-    AI -->|"Pathfinding & Aggro"| Ped["Pedestrians & Police Interceptors"]
-    
-    Veh --> Render["3D WebGL Renderer (Three.js)"]
-    Ped --> Render
-    
-    Veh --> Audio["Web Audio Synthesis (Engine, Horns, Sirens)"]
-    Ped --> Audio
-    
-    Render --> Screen["Browser Viewport (Canvas / HUD UI)"]
-    Audio --> Out["Speakers / Headphones"]
+## 🧱 How It Works
+
+```text
+[ Keyboard / Touch Controls ]
+              │
+              ▼
+    [ Game Loop / Core Engine ]
+         │               │
+         ▼               ▼
+[ Physics (Cannon-es) ]   [ Autonomous AI ]
+         │                       │
+         ├───────────────────────┤
+         ▼                       ▼
+[ Dynamic Vehicle & Debris ]   [ Traffic, Pedestrians & Police ]
+         │                       │
+         ├───────────────────────┘
+         │
+         ├───► [ 3D PBR Renderer (Three.js) ] ───► [ Viewport & HUD ]
+         │
+         └───► [ Procedural Web Audio API ]   ───► [ Speakers / Output ]
+```
 
 📂 Repository Structure
 nama-banglore-gta-game/
