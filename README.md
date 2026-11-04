@@ -1,174 +1,126 @@
-<div align="center">🏙️ BENGALURU: CITY OF DREAMS
 
-Explore, Drive, and Survive in an Open-World Bengaluru
+<div align="center">
 
-""JavaScript" (https://img.shields.io/badge/Language-JavaScript-f7df1e?style=for-the-badge&logo=javascript&logoColor=black)" (https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-""Three.js" (https://img.shields.io/badge/3D-Three.js-black?style=for-the-badge&logo=threedotjs&logoColor=white)" (https://threejs.org/)
-""Physics" (https://img.shields.io/badge/Physics-Cannon--es-5c3ee8?style=for-the-badge)" (https://github.com/pmndrs/cannon-es)
-""Vite" (https://img.shields.io/badge/Build-Vite-646cff?style=for-the-badge&logo=vite&logoColor=white)" (https://vite.dev/)
-""Web Audio" (https://img.shields.io/badge/Audio-Web_Audio_API-f59e0b?style=for-the-badge)" (https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)
+# 🚗 Namma Bengaluru GTA
 
-A 3D open-world action-adventure game set in Bengaluru, Karnataka. Explore the city, drive through traffic, interact with pedestrians, and experience dynamic police chases — all directly in your browser.
+### Bengaluru: City of Dreams
 
-"Gameplay Features" (#-gameplay-features) • "Controls" (#-controls) • "How It Works" (#-how-it-works) • "Quick Start" (#-quick-start) • "Tech Stack" (#-tech-stack)
+An open-world 3D action-adventure game set in the bustling streets of Bengaluru, Karnataka. Built directly for the web with browser-native physics, real-time 3D rendering, and procedural audio.
 
-</div>---
+**Three.js** • **Cannon-es** • **Vite** • **Web Audio API** • **HTML5 Canvas**
 
-🌍 Overview
+Explore iconic landmarks, hijack BMTC buses, dodge Bengaluru traffic, or trigger high-speed police chases across the city.
 
-BENGALURU: CITY OF DREAMS brings the streets of Bengaluru into an interactive 3D open-world gaming experience.
+[Overview](#-overview) • [Features](#-features) • [Controls](#-controls) • [Architecture](#-how-it-works) • [Repository Structure](#-repository-structure) • [Quick Start](#-quick-start) • [Troubleshooting](#-troubleshooting)
 
-Explore recognizable locations, navigate through city traffic, drive different vehicles, and interact with an autonomous urban environment. From BMTC buses and auto-rickshaws to police pursuits and destructible roadside objects, the game recreates the energy of Bengaluru in a GTA-inspired setting.
-
-The game combines five core systems:
-
-1. 3D City Environment (Three.js): Renders an explorable Bengaluru-inspired city with roads, landmarks, buildings, parks, and infrastructure.
-2. Physics-Based Gameplay (Cannon-es): Simulates vehicle movement, collisions, acceleration, braking, and interactions with the environment.
-3. Vehicle System: Allows players to enter and drive cars, sports cars, BMTC buses, and auto-rickshaws.
-4. AI Traffic & Pedestrians: Simulates autonomous city traffic, walking pedestrians, collision avoidance, and interactive NPC behavior.
-5. Dynamic Audio & Police AI: Generates procedural vehicle sounds, horns, crashes, and sirens while triggering police pursuit based on player actions.
+</div>
 
 ---
 
-✨ Gameplay Features
+## 🌍 Overview
 
-- 🏙️ Open-World Bengaluru: Explore Dr. B. R. Ambedkar Road, Margosa Road, Cubbon Park, Silk Board, Hebbal Flyover, tech parks, petrol bunks, and BMTC bus stops.
-- 🚗 Drivable Vehicles: Enter and drive cars, sports cars, BMTC city buses, and Bengaluru auto-rickshaws.
-- 🏎️ Dynamic Driving Physics: Experience acceleration, steering, reverse gear, braking, handbrake, and engine RPM.
-- 📱 Touchscreen Controls: Floating on-screen pedals, steering controls, horn, and vehicle exit buttons for mobile gameplay.
-- 🚦 Intelligent Traffic AI: Simulated BMTC buses, sedans, SUVs, sports cars, and auto-rickshaws with collision avoidance.
-- 🚶 Autonomous Pedestrians: Citizens walk around the city and react to player interactions, including self-defense behavior.
-- 🚔 Police Chase System: Trigger a 1–5 star wanted level through destructive actions and escape pursuing Karnataka Police interceptors.
-- 💥 Destructible Environment: Smash barricades, trash bins, and roadside stalls through vehicle collisions.
-- ☠️ GTA-Style WASTED Screen: Experience collision-based player elimination.
-- 🗺️ Interactive City Map: Expand the minimap to explore the city with live vehicle positions, pan, and zoom.
-- 🔊 Procedural 3D Audio: Synthesized BMTC air horns, car horns, auto-rickshaw sounds, engine effects, footsteps, collisions, and police sirens.
-- 🎥 Dynamic Camera: Switch between first-person and third-person driving perspectives.
+**Namma Bengaluru GTA** brings open-world urban exploration to your web browser. Drive around faithful virtual representations of famous Bengaluru corridors, navigate dynamic traffic, interact with reactive AI pedestrians, and face off against Karnataka Police interceptors.
+
+The game pipeline integrates five core systems:
+
+1. **PBR 3D Scene (Three.js):** Renders urban corridors, dynamic vehicle models, daylight shaders, and lighting.
+2. **Rigid Body Physics (Cannon-es):** Simulates vehicle suspension, steering torque, high-velocity collisions, and destructible props.
+3. **Procedural Web Audio:** Generates dynamic engine RPM sounds, BMTC pneumatic air horns, ambient traffic, and police sirens without relying on heavy external audio assets.
+4. **Autonomous AI Agents:** Directs multi-lane vehicular traffic and pedestrian sidewalk wanderers capable of initiating retaliatory melee fights.
+5. **Heads-Up Display (HUD):** Provides live-rendered glassmorphism dashboard gauges, a mini-radar, and an expandable interactive city map.
 
 ---
 
-🎮 Controls
+## ✨ Features
 
-Action| Keyboard| On-Screen / Touch
-Move / Drive| "W" "A" "S" "D" / Arrow Keys| "▲ SPEED" / "▼ BRAKE"
-Steer| "A" / "D" or Arrow Keys| "◀" / "▶"
-Sprint| "Shift"| —
-Jump / Handbrake| "Space"| —
-Enter / Exit Vehicle| "E"| "[E] DRIVE" / "[EXIT]"
-City Map| "M"| Click Minimap / "[M]"
-Vehicle Horn| "H"| "📢 HORN"
-Camera View| "C"| —
-Pause Menu| "Esc"| —
+- 🏙️ **Authentic Bengaluru Map:** Detailed roads including Dr. B.R. Ambedkar Road, Malleshwaram Margosa Road, Silk Board & Hebbal flyovers, Cubbon Park, fuel stations, and tech parks.
+- 🚌 **Iconic Drivable Vehicles:** Take the wheel of sedans, sports cars, auto-rickshaws, and iconic BMTC transit buses (Routes 335E & 500D).
+- 🛞 **Dynamic Vehicle Dynamics:** Realistic acceleration curves, drift/braking, reverse gear, weight distribution, and steering physics.
+- 🤼 **Pedestrian AI & Retaliation:** City residents stroll the walkways; bump into or attack them, and they engage in dynamic street melee combat.
+- 🚨 **5-Star Wanted System:** Smashing barricades, stalls, or civilians alerts Karnataka Police squad cars equipped with pursuit AI, flashers, and sirens.
+- 💀 **Classic "WASTED" Screen:** Triggers upon fatal impacts, high-speed vehicle ejections, or zero-health states.
+- 🗺️ **Full-Screen Interactive Map:** Press `M` to inspect live vehicle GPS markers, landmarks, and zoom across the district layout.
+- 🔊 **Synthetic 3D Audio:** Custom audio synthesizers emulate high-pitch auto horns, air bus horns, crash impacts, and Doppler-effect sirens.
 
 ---
 
-🧱 How It Works
+## 🎮 Controls
 
+| Action | Keyboard | Touch / On-Screen |
+|---|---|---|
+| **Move / Drive** | `W` `A` `S` `D` or `Arrow Keys` | `▲ SPEED` / `▼ BRAKE` / `◀ ▶ STEER` |
+| **Sprint** | `Shift` | — |
+| **Jump / Handbrake** | `Space` | `HANDBRAKE` |
+| **Enter / Exit Vehicle** | `E` | `[E] DRIVE` / `[EXIT]` |
+| **Enlarge City Map** | `M` | Tap Minimap or `[M]` |
+| **Vehicle Horn** | `H` | `📢 HORN` |
+| **Camera View** | `C` *(1st / 3rd-person toggle)* | — |
+| **Pause Game** | `Esc` | — |
+
+---
+
+## 🧱 How It Works
+
+```mermaid
 graph TD
-    Player["Player Input<br/>Keyboard / Touch"] --> Controller["Game Controller"]
-    Controller --> Movement["Player Movement"]
-    Controller --> Vehicle["Vehicle System"]
+    Input[Keyboard / Touch Input] --> Engine["Core Game Loop (Vite / JS)"]
+    Engine --> Phys["Physics World (Cannon-es)"]
+    Engine --> AI["Traffic & Pedestrian AI"]
     
-    Vehicle --> Physics["Cannon-es Physics"]
-    Physics --> Collision["Collision Detection"]
-    Collision --> Destruction["Destructible Objects"]
-    Collision --> Wanted["Wanted Level System"]
+    Phys -->|"Collision & Forces"| Veh["Vehicle Dynamics & Debris"]
+    AI -->|"Pathfinding & Aggro"| Ped["Pedestrians & Police Interceptors"]
     
-    Wanted --> Police["Police AI Pursuit"]
+    Veh --> Render["3D WebGL Renderer (Three.js)"]
+    Ped --> Render
     
-    World["Three.js 3D City"] --> Traffic["Traffic AI"]
-    World --> Pedestrians["Pedestrian AI"]
-    World --> Map["Interactive City Map"]
+    Veh --> Audio["Web Audio Synthesis (Engine, Horns, Sirens)"]
+    Ped --> Audio
     
-    Traffic --> Physics
-    Pedestrians --> Interaction["NPC Interaction"]
-    
-    Vehicle --> Audio["Web Audio API"]
-    Audio --> Sound["Procedural Audio<br/>Engine / Horn / Sirens"]
-    
-    Movement --> Camera["Dynamic Camera"]
-    Vehicle --> Camera
-    
-    Controller --> HUD["HUD / Minimap / UI"]
-    World --> HUD
-
----
+    Render --> Screen["Browser Viewport (Canvas / HUD UI)"]
+    Audio --> Out["Speakers / Headphones"]
 
 📂 Repository Structure
-
 nama-banglore-gta-game/
-├── public/              # Static assets and game resources
-├── src/                # Game source code
-│   ├── main.js         # Main application entry point
-│   ├── ...             # Game logic, physics, AI and rendering
-├── index.html           # Main HTML entry point
-├── package.json         # Dependencies and npm scripts
-├── vite.config.js       # Vite configuration
+├── public/              # Static assets, textures, and UI icons
+├── src/
+│   ├── audio/           # Procedural Web Audio API sound synthesizers
+│   ├── entities/        # Player, Pedestrian, and Vehicle controller classes
+│   ├── physics/         # Cannon-es world setup, colliders, and bounding bodies
+│   ├── world/           # Three.js map geometry, roads, buildings, and lighting
+│   ├── ui/              # Canvas HUD, Glassmorphism cockpit, and minimap
+│   └── main.js          # Main game loop and engine orchestration
+├── index.html           # Root entry HTML
+├── package.json         # Project scripts and dependencies
+├── vite.config.js       # Vite build setup
 └── README.md            # Project documentation
 
----
-
 🚀 Quick Start
-
 Prerequisites
-
-- Node.js (LTS recommended)
-- npm
-- Git
-- A modern WebGL-compatible browser
-
+ * Node.js (v16.0 or higher recommended)
+ * npm or yarn
+ * Modern WebGL2-compatible browser (Chrome, Edge, Firefox, or Safari)
 1. Clone the Repository
-
-git clone https://github.com/KiranJITdesign/nama-banglore-gta-game.git
+git clone [https://github.com/KiranJITdesign/nama-banglore-gta-game.git](https://github.com/KiranJITdesign/nama-banglore-gta-game.git)
 cd nama-banglore-gta-game
 
 2. Install Dependencies
-
 npm install
 
-3. Start the Development Server
-
+3. Launch Development Server
 npm run dev
 
-Open the local URL displayed in your terminal. By default:
-
-http://localhost:3000/
-
+Navigate to http://localhost:3000/ (or the local URL printed in your terminal) to play.
 4. Build for Production
-
 npm run build
-
-5. Preview the Production Build
-
 npm run preview
 
----
-
-🛠️ Tech Stack
-
-Technology| Purpose
-Three.js| 3D rendering, environment, and PBR graphics
-Cannon-es| Rigid-body physics and collision simulation
-Vite| Development server and production build
-JavaScript| Core game logic and interactivity
-Web Audio API| Real-time procedural audio synthesis
-HTML5 Canvas| Minimap rendering and visualization
-CSS3| HUD, glassmorphism interface, and responsive controls
-
----
-
+🧰 Troubleshooting
+| Problem | Fix |
+|---|---|
+| Low FPS / Stuttering | Ensure Hardware Acceleration is enabled in your browser settings (chrome://settings/system). |
+| No Sound / Horns Silent | Web browsers require a user interaction before allowing audio. Click anywhere on the game canvas to resume the Web Audio Context. |
+| Physics Clipping / Falling Through Map | Lower the physics substep interval or reload the scene if the browser tab was suspended in the background. |
 📝 Notes
+ * Runs best on desktop GPUs with WebGL2 support.
+ * Performance scaling can be tuned inside your graphics/rendering setup file (src/main.js).
 
-- Designed as a browser-based 3D gaming experience.
-- Best experienced in a modern browser with hardware acceleration enabled.
-- Keyboard and touchscreen controls support different play styles.
-- The game features Bengaluru-inspired locations, traffic, and urban elements.
-- Built using Three.js, Cannon-es, and Vite.
-
----
-
-<div align="center">🌆 Experience Bengaluru. Live the City. Own the Streets.
-
-Developed by "KiranJITdesign" (https://github.com/KiranJITdesign)
-
-</div>
